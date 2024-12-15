@@ -1,7 +1,6 @@
 # Boston-Crime-Report-Analysis
 Our analysis utilizes a dataset sourced from the Boston Police Department's crime incident reports, which includes key details about crime incidents from 2015 to 2024. This report focuses on the years 2018, 2020, and 2022. We employ descriptive statistics, visualizations, and logistic regression modeling to uncover meaningful patterns.
 
-About the Dataset:
 Publisher: Department of Innovation and Technology Location: Boston (all)
 Description: The dataset used in this report is sourced from the Boston Police Department’s (BPD) crime incident report system, which captures essential details about incidents to which BPD officers respond. Covering records from 2015 through 2024, the dataset focuses on documenting the type of crime, along with the time and location of each incident. This streamlined approach, part of a new system introduced in June 2015, reduces the number of fields, providing more concise information on each case.
 
