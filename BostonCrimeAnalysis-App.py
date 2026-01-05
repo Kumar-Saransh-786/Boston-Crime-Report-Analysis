@@ -13,7 +13,7 @@ st.set_page_config(page_title="Boston Crime Analysis Dashboard", layout="wide")
 # TITLE & DESCRIPTION
 # -------------------------------------------------
 st.markdown(
-    "<h1 style='text-align: center; font-weight: bold;'>🚔 Boston Crime Analysis Dashboard (2018–2022)</h1>",
+    "<h1 style='text-align: center; font-weight: bold;'>Boston Crime Analysis Dashboard (2018–2022)</h1>",
     unsafe_allow_html=True
 )
 
