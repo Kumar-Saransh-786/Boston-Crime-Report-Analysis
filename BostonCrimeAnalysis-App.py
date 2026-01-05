@@ -19,7 +19,7 @@ st.markdown("""
 This interactive dashboard presents an **exploratory analysis of Boston crime incidents**
 using data from the **Boston Police Department (2018–2022)**.
 
-📌 **Note:** Due to GitHub file-size limits, please upload the combined CSV file to begin.
+📌 Due to GitHub file-size limits, upload the combined CSV file to begin.
 """)
 
 st.divider()
@@ -44,34 +44,42 @@ with st.spinner("Loading crime data..."):
     df = load_data(uploaded_file)
 
 # -------------------------------------------------
-# SAFETY CHECKS & FEATURE CREATION
+# 🔐 GUARANTEED FEATURE ENGINEERING (NO MORE KeyErrors)
 # -------------------------------------------------
 
-# Create DISTRICT_NAME if it doesn't exist (raw CSV case)
-if "DISTRICT_NAME" not in df.columns and "DISTRICT" in df.columns:
-    district_mapping = {
-        "D4": "South End",
-        "A7": "East Boston",
-        "D14": "Brighton",
-        "B3": "Mattapan",
-        "A1": "Downtown",
-        "C6": "South Boston",
-        "A15": "Charlestown",
-        "E5": "West Roxbury",
-        "E18": "Hyde Park",
-        "B2": "Roxbury",
-        "C11": "Dorchester",
-        "E13": "Jamaica Plain",
-        "External": "External"
-    }
-    df["DISTRICT_NAME"] = df["DISTRICT"].map(district_mapping)
+# --- DISTRICT_NAME (ALWAYS CREATE IT) ---
+district_mapping = {
+    "D4": "South End",
+    "A7": "East Boston",
+    "D14": "Brighton",
+    "B3": "Mattapan",
+    "A1": "Downtown",
+    "C6": "South Boston",
+    "A15": "Charlestown",
+    "E5": "West Roxbury",
+    "E18": "Hyde Park",
+    "B2": "Roxbury",
+    "C11": "Dorchester",
+    "E13": "Jamaica Plain",
+    "External": "External"
+}
 
-# Ensure SHOOTING column is numeric
-if df["SHOOTING"].dtype == object:
-    df["SHOOTING"] = df["SHOOTING"].fillna(0)
-    df["SHOOTING"] = df["SHOOTING"].apply(lambda x: 1 if str(x).upper() == "Y" else 0)
+if "DISTRICT" in df.columns:
+    df["DISTRICT_NAME"] = df["DISTRICT"].map(district_mapping).fillna("Unknown")
+else:
+    df["DISTRICT_NAME"] = "Unknown"
 
-st.success("Data loaded and validated successfully!")
+# --- SHOOTING (ALWAYS NUMERIC) ---
+if "SHOOTING" in df.columns:
+    df["SHOOTING"] = (
+        df["SHOOTING"]
+        .fillna(0)
+        .apply(lambda x: 1 if str(x).upper() == "Y" or x == 1 else 0)
+    )
+else:
+    df["SHOOTING"] = 0
+
+st.success("Data loaded and features created successfully!")
 
 # -------------------------------------------------
 # SIDEBAR NAVIGATION
@@ -127,7 +135,11 @@ elif section == "Crime Distribution":
 # TEMPORAL TRENDS
 # -------------------------------------------------
 elif section == "Temporal Trends":
-    year = st.selectbox("Select Year", sorted(df["YEAR"].dropna().unique()))
+    if "YEAR" in df.columns:
+        year = st.selectbox("Select Year", sorted(df["YEAR"].dropna().unique()))
+    else:
+        st.warning("YEAR column not found.")
+        st.stop()
 
     st.subheader("📅 Incidents by Day of Week")
     day_df = (
